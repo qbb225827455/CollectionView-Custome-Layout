@@ -1,64 +1,20 @@
 import UIKit
 
 class ViewController: UIViewController {
+    enum LayoutType {
+        case def
+        case pinterest
+    }
     
+    var layoutType: LayoutType = .def
     var collectionView: UICollectionView!
-    var colors: [[UIColor]] = [
-        [.systemRed,
-         .systemBlue,
-         .systemGreen,
-         .systemOrange,
-         .systemYellow,
-         .systemPink,
-         .systemPurple,
-         .systemRed,
-         .systemBlue,
-         .systemGreen,
-         .systemOrange,
-         .systemYellow,
-         .systemPink,
-         .systemPurple,
-         .systemRed,
-         .systemBlue,
-         .systemGreen,
-         .systemOrange,
-         .systemYellow,
-         .systemPink,
-         .systemPurple],
-        
-        [.brown,
-         .systemTeal,
-         .systemIndigo,
-         .brown,
-         .systemTeal,
-         .systemIndigo,
-         .brown,
-         .systemTeal,
-         .systemIndigo,
-         .brown,
-         .systemTeal,
-         .systemIndigo]
-    ]
-    var titles: [String] = ["區段1", "區段2"]
+    var colors: [[UIColor]] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationController?.setNavigationBarHidden(false, animated: true)
-        
-        // 創建CollectionView
-        let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
-            return self.createGridLayout(index: sectionIndex)
-        }
-        collectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
-        collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: "header", withReuseIdentifier: "header")
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        collectionView.backgroundColor = .clear
-        view.addSubview(collectionView)
-        
-        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
-        collectionView.addGestureRecognizer(gesture)
+        self.initData()
+        self.initView()
     }
     
     @objc func handleLongPressGesture(_ gesture: UILongPressGestureRecognizer) {
@@ -77,39 +33,80 @@ class ViewController: UIViewController {
         }
     }
     
+    func initData() {
+        let tempColors1 = Array(repeating: UIColor.random, count: 5)
+        let tempColors2 = Array(repeating: UIColor.random, count: 10)
+        let tempColors3 = Array(repeating: UIColor.random, count: 12)
+        colors.append(tempColors1)
+        colors.append(tempColors2)
+        colors.append(tempColors3)
+    }
+    
+    func initView() {
+        // 創建CollectionView
+        self.layoutType = .def
+        switch self.layoutType {
+        case .def:
+            let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
+                return self.createGridLayout(index: sectionIndex)
+            }
+            collectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
+        case .pinterest:
+            let pinterestLayout = PinterestLayout()
+            pinterestLayout.delegate = self
+            collectionView = UICollectionView(frame: view.frame, collectionViewLayout: pinterestLayout)
+        }
+        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
+        collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: "header", withReuseIdentifier: "header")
+        collectionView.dataSource = self
+        collectionView.delegate = self
+        collectionView.backgroundColor = .clear
+        view.addSubview(collectionView)
+        
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
+        collectionView.addGestureRecognizer(gesture)
+    }
+    
     func createGridLayout(index: Int) -> NSCollectionLayoutSection {
+        var sectionBehavior: UICollectionLayoutSectionOrthogonalScrollingBehavior = .none
+        var group: NSCollectionLayoutGroup!
         switch index {
         case 0:
+            sectionBehavior = .continuous
             let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(100), heightDimension: .absolute(100))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 0)
             
             let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(300), heightDimension: .absolute(100))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
             
-            let section = NSCollectionLayoutSection(group: group)
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
-            let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
-            section.boundarySupplementaryItems = [headerElement]
-            section.orthogonalScrollingBehavior = .continuous
-            
-            return section
-            
-        default:
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalWidth(1/3))
+        case 1:
+            sectionBehavior = .none
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .fractionalWidth(1/5))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1/3))
-            let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1/5))
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
             
-            let section = NSCollectionLayoutSection(group: group)
-            let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .estimated(50))
-            let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
-            section.boundarySupplementaryItems = [headerElement]
+        default:
+            sectionBehavior = .continuous
+            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             
-            return section
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .absolute(120))
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
+//            group.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: nil, trailing: .fixed(<#CGFloat#>), bottom: nil)
         }
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+        let headerElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: "header", alignment: .top)
+        section.boundarySupplementaryItems = [headerElement]
+        section.orthogonalScrollingBehavior = sectionBehavior
+        
+        return section
     }
     
     func animateCell(_ cell: UICollectionViewCell, isShaking: Bool) {
@@ -128,7 +125,6 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return colors.count
     }
@@ -140,7 +136,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: "header", withReuseIdentifier: "header", for: indexPath) as! SectionHeaderView
-        headerView.titleLabel.text = self.titles[indexPath.section]
+        headerView.titleLabel.text = "區段\(indexPath.section+1)"
         headerView.titleLabel.font = UIFont.systemFont(ofSize: 20, weight: .bold)
         return headerView
     }
@@ -162,7 +158,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
     func collectionView(_ collectionView: UICollectionView, canMoveItemAt indexPath: IndexPath) -> Bool {
         if indexPath.section == 0 {
-            return false
+            return self.layoutType == .def ? false : true
         } else {
             if colors[indexPath.section].count == 0 {
                 return false
@@ -173,7 +169,18 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, moveItemAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {
-        if sourceIndexPath.section != 0 && destinationIndexPath.section != 0 {
+        if self.layoutType == .def {
+            if sourceIndexPath.section != 0
+                && destinationIndexPath.section != 0 {
+                let item = colors[sourceIndexPath.section].remove(at: sourceIndexPath.row)
+                if colors[destinationIndexPath.section].count == 0 {
+                    colors[destinationIndexPath.section].insert(item, at: 0)
+                } else {
+                    colors[destinationIndexPath.section].insert(item, at: destinationIndexPath.row)
+                }
+            }
+            
+        } else {
             let item = colors[sourceIndexPath.section].remove(at: sourceIndexPath.row)
             if colors[destinationIndexPath.section].count == 0 {
                 colors[destinationIndexPath.section].insert(item, at: 0)
@@ -184,11 +191,31 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveOfItemFromOriginalIndexPath originalIndexPath: IndexPath, atCurrentIndexPath currentIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
-        if originalIndexPath.section == 0 || proposedIndexPath.section == 0 {
+        if self.layoutType == .def
+            && (originalIndexPath.section == 0 || proposedIndexPath.section == 0) {
             return originalIndexPath
         }
         
         return proposedIndexPath
+    }
+}
+
+// MARK: - WaterFallLayoutDelegate
+extension ViewController: PinterestLayoutDelegate {
+    func arrangeType(in collectionView: UICollectionView) -> LayoutArrangeType {
+        return .shortToTall
+    }
+    
+    func itemPadding(in collectionView: UICollectionView) -> CGFloat {
+        return 5
+    }
+    
+    func numberOfColumns(in collectionView: UICollectionView) -> Int {
+        return 3
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, itemHeightAtIndexPath indexPath: IndexPath) -> CGFloat {
+        return CGFloat.random(in: 50...100) + 50
     }
 }
 
