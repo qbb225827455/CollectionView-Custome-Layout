@@ -34,9 +34,19 @@ class ViewController: UIViewController {
     }
     
     func initData() {
-        let tempColors1 = Array(repeating: UIColor.random, count: 5)
-        let tempColors2 = Array(repeating: UIColor.random, count: 10)
-        let tempColors3 = Array(repeating: UIColor.random, count: 12)
+        var tempColors1: [UIColor] = []
+        var tempColors2: [UIColor] = []
+        var tempColors3: [UIColor] = []
+        for _ in 1...5 {
+            tempColors1.append(UIColor.random)
+        }
+        for _ in 1...10 {
+            tempColors2.append(UIColor.random)
+        }
+        for _ in 1...10 {
+            let t = Array(repeating: UIColor.random, count: 3)
+            tempColors3.append(contentsOf: t)
+        }
         colors.append(tempColors1)
         colors.append(tempColors2)
         colors.append(tempColors3)
@@ -72,32 +82,37 @@ class ViewController: UIViewController {
         var group: NSCollectionLayoutGroup!
         switch index {
         case 0:
-            sectionBehavior = .continuous
             let itemSize = NSCollectionLayoutSize(widthDimension: .absolute(100), heightDimension: .absolute(100))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 0)
             
             let groupSize = NSCollectionLayoutSize(widthDimension: .absolute(300), heightDimension: .absolute(100))
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
+            sectionBehavior = .continuous
             
         case 1:
-            sectionBehavior = .none
             let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .fractionalWidth(1/5))
             let item = NSCollectionLayoutItem(layoutSize: itemSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             
             let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1/5))
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
+            sectionBehavior = .none
             
         default:
-            sectionBehavior = .continuous
-            let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
-            let item = NSCollectionLayoutItem(layoutSize: itemSize)
+            let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
+            let item = NSCollectionLayoutItem(layoutSize: layoutSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let layoutSize2 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
+            let item2 = NSCollectionLayoutItem(layoutSize: layoutSize2)
+            item2.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let layoutSize3 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
+            let item3 = NSCollectionLayoutItem(layoutSize: layoutSize3)
+            item3.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .absolute(120))
-            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
-//            group.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: nil, trailing: .fixed(<#CGFloat#>), bottom: nil)
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .absolute(150))
+            group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems : [item, item2, item3])
+            sectionBehavior = .continuous
         }
         
         let section = NSCollectionLayoutSection(group: group)
@@ -131,6 +146,10 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         let count = colors[section].count
+        if section == 0 {
+            return count
+        }
+        
         return count == 0 ? 1 : count
     }
     
