@@ -37,6 +37,8 @@ class ViewController: UIViewController {
         var tempColors1: [UIColor] = []
         var tempColors2: [UIColor] = []
         var tempColors3: [UIColor] = []
+        var tempColors4: [UIColor] = []
+        var tempColors5: [UIColor] = []
         for _ in 1...5 {
             tempColors1.append(UIColor.random)
         }
@@ -47,9 +49,20 @@ class ViewController: UIViewController {
             let t = Array(repeating: UIColor.random, count: 3)
             tempColors3.append(contentsOf: t)
         }
+        for _ in 1...10 {
+            let t = Array(repeating: UIColor.random, count: 1)
+            let t2 = Array(repeating: UIColor.random, count: 2)
+            tempColors4.append(contentsOf: t)
+            tempColors4.append(contentsOf: t2)
+        }
+        for _ in 1...20 {
+            tempColors5.append(UIColor.random)
+        }
         colors.append(tempColors1)
         colors.append(tempColors2)
         colors.append(tempColors3)
+        colors.append(tempColors4)
+        colors.append(tempColors5)
     }
     
     func initView() {
@@ -71,6 +84,7 @@ class ViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionView.backgroundColor = .clear
+        collectionView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 50, right: 0)
         view.addSubview(collectionView)
         
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(handleLongPressGesture(_:)))
@@ -99,20 +113,107 @@ class ViewController: UIViewController {
             group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitems : [item])
             sectionBehavior = .none
             
-        default:
-            let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
+        case 2:
+            let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(30))
             let item = NSCollectionLayoutItem(layoutSize: layoutSize)
             item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-            let layoutSize2 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
+            let layoutSize2 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(40))
             let item2 = NSCollectionLayoutItem(layoutSize: layoutSize2)
             item2.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
-            let layoutSize3 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
+            let layoutSize3 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(50))
             let item3 = NSCollectionLayoutItem(layoutSize: layoutSize3)
             item3.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
             
-            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .absolute(150))
+            let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/5), heightDimension: .absolute(120))
             group = NSCollectionLayoutGroup.vertical(layoutSize: groupSize, subitems : [item, item2, item3])
             sectionBehavior = .continuous
+            
+        case 3:
+            // Group1
+            let layoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let item = NSCollectionLayoutItem(layoutSize: layoutSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group1Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
+            let group1 = NSCollectionLayoutGroup.horizontal(layoutSize: group1Size, subitems: [item])
+            
+            // Group2
+            let layoutSize2 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/3))
+            let item2 = NSCollectionLayoutItem(layoutSize: layoutSize2)
+            item2.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let layoutSize3 = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(2/3))
+            let item3 = NSCollectionLayoutItem(layoutSize: layoutSize3)
+            item3.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group2Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/2), heightDimension: .fractionalHeight(1))
+            let group2 = NSCollectionLayoutGroup.vertical(layoutSize: group2Size, subitems: [item2, item3])
+
+            let groupLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .absolute(120))
+            group = NSCollectionLayoutGroup.horizontal(layoutSize: groupLayoutSize, subitems: [group1, group2])
+            sectionBehavior = .continuous
+            
+        default:
+            // Group1
+            let fullItemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1))
+            let fullItem = NSCollectionLayoutItem(layoutSize:
+                                                    fullItemSize)
+            fullItem.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group1Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(2/7))
+            let group1 = NSCollectionLayoutGroup.horizontal(layoutSize: group1Size, subitems: [fullItem])
+            
+            // Group2
+            // Group2-Left
+            let group2LeftItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let group2LeftItem = NSCollectionLayoutItem(layoutSize: group2LeftItemSize)
+            group2LeftItem.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group2LeftSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1))
+            let group2Left = NSCollectionLayoutGroup.horizontal(layoutSize: group2LeftSize, subitems: [group2LeftItem])
+            // Group2-Right
+            let group2RightItem1Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/2))
+            let group2RightItem1 = NSCollectionLayoutItem(layoutSize: group2RightItem1Size)
+            group2RightItem1.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group2RightItem2Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/2))
+            let group2RightItem2 = NSCollectionLayoutItem(layoutSize: group2RightItem2Size)
+            group2RightItem2.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group2RightSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1))
+            let group2Right = NSCollectionLayoutGroup.vertical(layoutSize: group2RightSize, subitems: [group2RightItem1, group2RightItem2])
+            // Group2組合
+            let group2Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(2/7))
+            let group2 = NSCollectionLayoutGroup.horizontal(layoutSize: group2Size, subitems: [group2Left, group2Right])
+            
+            // Group3
+            let group3ItemSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1/3),
+                heightDimension: .fractionalHeight(1))
+            let group3Item = NSCollectionLayoutItem(layoutSize:
+                                                        group3ItemSize)
+            group3Item.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group3Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/7))
+            let group3 = NSCollectionLayoutGroup.horizontal(layoutSize: group3Size, subitems: [group3Item])
+            
+            // Group4
+            // Group4-Left
+            let group4LeftItem1Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/2))
+            let group4LeftItem1 = NSCollectionLayoutItem(layoutSize: group4LeftItem1Size)
+            group4LeftItem1.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group4LeftItem2Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1/2))
+            let group4LeftItem2 = NSCollectionLayoutItem(layoutSize: group4LeftItem2Size)
+            group4LeftItem2.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group4LeftSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/3), heightDimension: .fractionalHeight(1))
+            let group4Left = NSCollectionLayoutGroup.vertical(layoutSize: group4LeftSize, subitems: [group4LeftItem1, group4LeftItem2])
+            // Group4-Right
+            let group4RightItemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            let group4RightItem = NSCollectionLayoutItem(layoutSize: group4RightItemSize)
+            group4RightItem.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 5, bottom: 5, trailing: 5)
+            let group4RightSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(2/3), heightDimension: .fractionalHeight(1))
+            let group4Right = NSCollectionLayoutGroup.horizontal(layoutSize: group4RightSize, subitems: [group4RightItem])
+            // Group4組合
+            let group4Size = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(2/7))
+            let group4 = NSCollectionLayoutGroup.horizontal(layoutSize: group4Size, subitems: [group4Left, group4Right])
+
+            let groupLayoutSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+            group = NSCollectionLayoutGroup.vertical(layoutSize: groupLayoutSize, subitems: [group1, group2, group3, group4])
+            sectionBehavior = .none
         }
         
         let section = NSCollectionLayoutSection(group: group)
