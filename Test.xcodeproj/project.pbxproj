@@ -17,6 +17,7 @@
 		55877D842D263C97001EA6B4 /* PinterestLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55877D832D263C97001EA6B4 /* PinterestLayout.swift */; };
 		5596FDC32BB54CBD003AF640 /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5596FDC22BB54CBD003AF640 /* TestVC.swift */; };
 		55A3EA9B2D26958900601E9A /* UIcolor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3EA9A2D26958900601E9A /* UIcolor+Ext.swift */; };
+		55A3EAA22D2BED6100601E9A /* CardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3EAA12D2BED6100601E9A /* CardLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,6 +33,7 @@
 		55877D832D263C97001EA6B4 /* PinterestLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PinterestLayout.swift; sourceTree = "<group>"; };
 		5596FDC22BB54CBD003AF640 /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		55A3EA9A2D26958900601E9A /* UIcolor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIcolor+Ext.swift"; sourceTree = "<group>"; };
+		55A3EAA12D2BED6100601E9A /* CardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +85,7 @@
 			isa = PBXGroup;
 			children = (
 				55877D832D263C97001EA6B4 /* PinterestLayout.swift */,
+				55A3EAA12D2BED6100601E9A /* CardLayout.swift */,
 			);
 			path = LayoutTest;
 			sourceTree = "<group>";
@@ -171,6 +174,7 @@
 				5539B2812A04E96600BC7C8D /* ViewController.swift in Sources */,
 				5539B27D2A04E96600BC7C8D /* AppDelegate.swift in Sources */,
 				55A3EA9B2D26958900601E9A /* UIcolor+Ext.swift in Sources */,
+				55A3EAA22D2BED6100601E9A /* CardLayout.swift in Sources */,
 				5539B27F2A04E96600BC7C8D /* SceneDelegate.swift in Sources */,
 				5539B2912A08EE6800BC7C8D /* SectionHeaderView.swift in Sources */,
 			);

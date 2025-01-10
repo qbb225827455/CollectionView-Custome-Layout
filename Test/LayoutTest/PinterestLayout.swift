@@ -15,7 +15,7 @@ enum LayoutArrangeType {
 
 protocol PinterestLayoutDelegate: AnyObject {
     func arrangeType(in collectionView: UICollectionView) -> LayoutArrangeType
-    func itemPadding(in collectionView: UICollectionView) -> CGFloat
+    func cellInsetPadding(in collectionView: UICollectionView) -> CGFloat
     func numberOfColumns(in collectionView: UICollectionView) -> Int
     func collectionView(_ collectionView: UICollectionView, itemHeightAtIndexPath indexPath: IndexPath) -> CGFloat
 }
@@ -24,7 +24,6 @@ class PinterestLayout: UICollectionViewFlowLayout {
     
     weak var delegate: PinterestLayoutDelegate?
     
-    private let cellPadding: CGFloat = 6
     private var cache: [UICollectionViewLayoutAttributes] = []
     private var contentHeight: CGFloat = 0
     private var contentWidth: CGFloat {
@@ -33,10 +32,6 @@ class PinterestLayout: UICollectionViewFlowLayout {
         }
         let insets = collectionView.contentInset
         return collectionView.bounds.width - (insets.left + insets.right)
-    }
-    
-    override var collectionViewContentSize: CGSize {
-        return CGSize(width: contentWidth, height: contentHeight)
     }
     
     override func prepare() {
@@ -61,8 +56,7 @@ class PinterestLayout: UICollectionViewFlowLayout {
             
             // 4
             let itemHeight = delegate?.collectionView(collectionView, itemHeightAtIndexPath: indexPath) ?? 50
-            let itemPadding = delegate?.itemPadding(in: collectionView) ?? 5
-            let height = itemPadding * 2 + itemHeight
+            let height = itemHeight
             
             let arrangeType = delegate?.arrangeType(in: collectionView) ?? .def
             var frame: CGRect!
@@ -80,7 +74,8 @@ class PinterestLayout: UICollectionViewFlowLayout {
                                width: columnWidth, height: height)
                 column = shortestColumn
             }
-            let insetFrame = frame.insetBy(dx: cellPadding, dy: cellPadding)
+            let cellInsetPadding = delegate?.cellInsetPadding(in: collectionView) ?? 5
+            let insetFrame = frame.insetBy(dx: cellInsetPadding, dy: cellInsetPadding)
             
             // 5
             let attributes = UICollectionViewLayoutAttributes(forCellWith: indexPath)
@@ -91,6 +86,10 @@ class PinterestLayout: UICollectionViewFlowLayout {
             contentHeight = max(contentHeight, frame.maxY)
             yOffset[column] = yOffset[column] + height
         }
+    }
+    
+    override var collectionViewContentSize: CGSize {
+        return CGSize(width: contentWidth, height: contentHeight)
     }
     
     override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {

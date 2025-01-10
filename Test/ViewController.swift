@@ -4,6 +4,7 @@ class ViewController: UIViewController {
     enum LayoutType {
         case def
         case pinterest
+        case card
     }
     
     var layoutType: LayoutType = .def
@@ -39,7 +40,7 @@ class ViewController: UIViewController {
         var tempColors3: [UIColor] = []
         var tempColors4: [UIColor] = []
         var tempColors5: [UIColor] = []
-        for _ in 1...5 {
+        for _ in 1...30 {
             tempColors1.append(UIColor.random)
         }
         for _ in 1...10 {
@@ -67,7 +68,7 @@ class ViewController: UIViewController {
     
     func initView() {
         // 創建CollectionView
-        self.layoutType = .def
+        self.layoutType = .card
         switch self.layoutType {
         case .def:
             let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
@@ -78,6 +79,10 @@ class ViewController: UIViewController {
             let pinterestLayout = PinterestLayout()
             pinterestLayout.delegate = self
             collectionView = UICollectionView(frame: view.frame, collectionViewLayout: pinterestLayout)
+        case .card:
+            let cardLayout = CardLayout()
+            cardLayout.delegate = self
+            collectionView = UICollectionView(frame: view.frame, collectionViewLayout: cardLayout)
         }
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: "header", withReuseIdentifier: "header")
@@ -320,13 +325,13 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
     }
 }
 
-// MARK: - WaterFallLayoutDelegate
+// MARK: - PinterestLayoutDelegate
 extension ViewController: PinterestLayoutDelegate {
     func arrangeType(in collectionView: UICollectionView) -> LayoutArrangeType {
         return .shortToTall
     }
     
-    func itemPadding(in collectionView: UICollectionView) -> CGFloat {
+    func cellInsetPadding(in collectionView: UICollectionView) -> CGFloat {
         return 5
     }
     
@@ -336,6 +341,27 @@ extension ViewController: PinterestLayoutDelegate {
     
     func collectionView(_ collectionView: UICollectionView, itemHeightAtIndexPath indexPath: IndexPath) -> CGFloat {
         return CGFloat.random(in: 50...100) + 50
+    }
+}
+
+// MARK: - CardLayoutDelegate
+extension ViewController: CardLayoutDelegate {
+    func scrollingType() -> LayoutScrollingType {
+        .horizontal
+    }
+    
+    func numberOfVisibleItems(in collectionView: UICollectionView) -> Int {
+        return 10
+    }
+    
+    func spacingBetweenCell(in collectionView: UICollectionView) -> CGFloat {
+        return 30
+    }
+    
+    func itemSize(in collectionView: UICollectionView) -> CGSize {
+        let w = collectionView.frame.width * 0.6
+        let h = collectionView.frame.height * 0.6
+        return CGSize(width: w, height: h)
     }
 }
 
