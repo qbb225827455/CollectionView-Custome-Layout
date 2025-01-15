@@ -8,13 +8,8 @@
 import Foundation
 import UIKit
 
-enum LayoutArrangeType {
-    case def
-    case shortToTall
-}
-
 protocol PinterestLayoutDelegate: AnyObject {
-    func arrangeType(in collectionView: UICollectionView) -> LayoutArrangeType
+    func arrangeType(in collectionView: UICollectionView) -> LayoutModel.LayoutArrangeType
     func cellInsetPadding(in collectionView: UICollectionView) -> CGFloat
     func numberOfColumns(in collectionView: UICollectionView) -> Int
     func collectionView(_ collectionView: UICollectionView, itemHeightAtIndexPath indexPath: IndexPath) -> CGFloat

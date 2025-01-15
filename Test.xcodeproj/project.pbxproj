@@ -18,6 +18,8 @@
 		5596FDC32BB54CBD003AF640 /* TestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5596FDC22BB54CBD003AF640 /* TestVC.swift */; };
 		55A3EA9B2D26958900601E9A /* UIcolor+Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3EA9A2D26958900601E9A /* UIcolor+Ext.swift */; };
 		55A3EAA22D2BED6100601E9A /* CardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3EAA12D2BED6100601E9A /* CardLayout.swift */; };
+		55A3EAA42D31213900601E9A /* LayoutModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3EAA32D31213900601E9A /* LayoutModel.swift */; };
+		55A3EAA62D3121A600601E9A /* FlatCardLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 55A3EAA52D3121A600601E9A /* FlatCardLayout.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +36,8 @@
 		5596FDC22BB54CBD003AF640 /* TestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestVC.swift; sourceTree = "<group>"; };
 		55A3EA9A2D26958900601E9A /* UIcolor+Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIcolor+Ext.swift"; sourceTree = "<group>"; };
 		55A3EAA12D2BED6100601E9A /* CardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardLayout.swift; sourceTree = "<group>"; };
+		55A3EAA32D31213900601E9A /* LayoutModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LayoutModel.swift; sourceTree = "<group>"; };
+		55A3EAA52D3121A600601E9A /* FlatCardLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlatCardLayout.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,8 +88,10 @@
 		55877D822D263C5D001EA6B4 /* LayoutTest */ = {
 			isa = PBXGroup;
 			children = (
+				55A3EAA32D31213900601E9A /* LayoutModel.swift */,
 				55877D832D263C97001EA6B4 /* PinterestLayout.swift */,
 				55A3EAA12D2BED6100601E9A /* CardLayout.swift */,
+				55A3EAA52D3121A600601E9A /* FlatCardLayout.swift */,
 			);
 			path = LayoutTest;
 			sourceTree = "<group>";
@@ -171,7 +177,9 @@
 			files = (
 				55877D842D263C97001EA6B4 /* PinterestLayout.swift in Sources */,
 				5596FDC32BB54CBD003AF640 /* TestVC.swift in Sources */,
+				55A3EAA42D31213900601E9A /* LayoutModel.swift in Sources */,
 				5539B2812A04E96600BC7C8D /* ViewController.swift in Sources */,
+				55A3EAA62D3121A600601E9A /* FlatCardLayout.swift in Sources */,
 				5539B27D2A04E96600BC7C8D /* AppDelegate.swift in Sources */,
 				55A3EA9B2D26958900601E9A /* UIcolor+Ext.swift in Sources */,
 				55A3EAA22D2BED6100601E9A /* CardLayout.swift in Sources */,

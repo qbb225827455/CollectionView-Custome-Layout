@@ -7,16 +7,11 @@
 
 import UIKit
 
-enum LayoutScrollingType {
-    case vertical
-    case horizontal
-}
-
 protocol CardLayoutDelegate: AnyObject {
-    func scrollingType() -> LayoutScrollingType
+    func cardScrollingType() -> LayoutModel.LayoutScrollingType
     func numberOfVisibleItems(in collectionView: UICollectionView) -> Int
-    func spacingBetweenCell(in collectionView: UICollectionView) -> CGFloat
-    func itemSize(in collectionView: UICollectionView) -> CGSize
+    func spacingBetweenCard(in collectionView: UICollectionView) -> CGFloat
+    func cardItemSize(in collectionView: UICollectionView) -> CGSize
 }
 
 class CardLayout: UICollectionViewLayout {
@@ -24,11 +19,9 @@ class CardLayout: UICollectionViewLayout {
     weak var delegate: CardLayoutDelegate?
     
     // MARK: CollectionView Layout設定
-    private var cache: [IndexPath: UICollectionViewLayoutAttributes] = [:]
-    private var visibleIndexes: Set<IndexPath> = []
-    private var scrollDirection: LayoutScrollingType {
+    private var scrollDirection: LayoutModel.LayoutScrollingType {
         guard let delegate = delegate else { return .horizontal }
-        return delegate.scrollingType()
+        return delegate.cardScrollingType()
     }
     
     private var contentSize: CGSize {
@@ -39,7 +32,7 @@ class CardLayout: UICollectionViewLayout {
         switch self.scrollDirection {
         case .vertical:
             let insets = collectionView.contentInset
-            let w = collectionView.bounds.width - (insets.top + insets.bottom)
+            let w = collectionView.bounds.width - (insets.left + insets.right)
             
             let itemCount = CGFloat(collectionView.numberOfItems(inSection: 0))
             let h = collectionView.bounds.height * itemCount
@@ -68,7 +61,7 @@ class CardLayout: UICollectionViewLayout {
               let delegate = delegate else {
             return 16
         }
-        return delegate.spacingBetweenCell(in: collectionView)
+        return delegate.spacingBetweenCard(in: collectionView)
     }
     
     private var itemSize: CGSize {
@@ -76,7 +69,7 @@ class CardLayout: UICollectionViewLayout {
               let delegate = delegate else {
             return CGSize(width: 250, height: 400)
         }
-        return delegate.itemSize(in: collectionView)
+        return delegate.cardItemSize(in: collectionView)
     }
     
     // MARK: -
@@ -124,7 +117,6 @@ class CardLayout: UICollectionViewLayout {
             deltaOffset = Int(collectionView.contentOffset.y) % Int(collectionView.bounds.height)
             percentageDeltaOffset = CGFloat(deltaOffset) / collectionView.bounds.height
         case .horizontal:
-            
             deltaOffset = Int(collectionView.contentOffset.x) % Int(collectionView.bounds.width)
             percentageDeltaOffset = CGFloat(deltaOffset) / collectionView.bounds.width
         }

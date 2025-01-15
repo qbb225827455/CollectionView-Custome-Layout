@@ -1,13 +1,14 @@
 import UIKit
 
 class ViewController: UIViewController {
-    enum LayoutType {
-        case def
-        case pinterest
-        case card
+    enum LayoutType: Int {
+        case def = 0
+        case pinterest = 1
+        case card = 2
+        case flatCard = 3
     }
     
-    var layoutType: LayoutType = .def
+    var layoutType: LayoutType = .flatCard
     var collectionView: UICollectionView!
     var colors: [[UIColor]] = []
     
@@ -68,7 +69,6 @@ class ViewController: UIViewController {
     
     func initView() {
         // 創建CollectionView
-        self.layoutType = .card
         switch self.layoutType {
         case .def:
             let layout = UICollectionViewCompositionalLayout { (sectionIndex, environment) -> NSCollectionLayoutSection? in
@@ -83,6 +83,10 @@ class ViewController: UIViewController {
             let cardLayout = CardLayout()
             cardLayout.delegate = self
             collectionView = UICollectionView(frame: view.frame, collectionViewLayout: cardLayout)
+        case .flatCard:
+            let flatCardLayout = FlatCardLayout()
+            flatCardLayout.delegate = self
+            collectionView = UICollectionView(frame: view.frame, collectionViewLayout: flatCardLayout)
         }
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "cell")
         collectionView.register(SectionHeaderView.self, forSupplementaryViewOfKind: "header", withReuseIdentifier: "header")
@@ -327,7 +331,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource {
 
 // MARK: - PinterestLayoutDelegate
 extension ViewController: PinterestLayoutDelegate {
-    func arrangeType(in collectionView: UICollectionView) -> LayoutArrangeType {
+    func arrangeType(in collectionView: UICollectionView) -> LayoutModel.LayoutArrangeType {
         return .shortToTall
     }
     
@@ -346,7 +350,7 @@ extension ViewController: PinterestLayoutDelegate {
 
 // MARK: - CardLayoutDelegate
 extension ViewController: CardLayoutDelegate {
-    func scrollingType() -> LayoutScrollingType {
+    func cardScrollingType() -> LayoutModel.LayoutScrollingType {
         .horizontal
     }
     
@@ -354,11 +358,28 @@ extension ViewController: CardLayoutDelegate {
         return 10
     }
     
-    func spacingBetweenCell(in collectionView: UICollectionView) -> CGFloat {
+    func spacingBetweenCard(in collectionView: UICollectionView) -> CGFloat {
         return 30
     }
     
-    func itemSize(in collectionView: UICollectionView) -> CGSize {
+    func cardItemSize(in collectionView: UICollectionView) -> CGSize {
+        let w = collectionView.frame.width * 0.6
+        let h = collectionView.frame.height * 0.6
+        return CGSize(width: w, height: h)
+    }
+}
+
+// MARK: - FlatCardLayoutDelegate
+extension ViewController: FlatCardLayoutDelegate {
+    func flatCardScrollingType() -> LayoutModel.LayoutScrollingType {
+        .horizontal
+    }
+    
+    func spacingBetweenFlatCard(in collectionView: UICollectionView) -> CGFloat {
+        return 30
+    }
+    
+    func flatCardItemSize(in collectionView: UICollectionView) -> CGSize {
         let w = collectionView.frame.width * 0.6
         let h = collectionView.frame.height * 0.6
         return CGSize(width: w, height: h)
